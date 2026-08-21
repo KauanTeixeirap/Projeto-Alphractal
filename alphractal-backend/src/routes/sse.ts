@@ -3,7 +3,7 @@ import { subscribeToGasTelemetry, type GasTelemetryPayload } from '../services/e
 
 export const sseRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
   fastify.get('/api/v1/fees/stream', (request, reply) => {
-    // Cabeçalhos obrigatórios para o protocolo SSE não fechar a conexão
+    // Cabeçalhos essenciais para streaming unidirecional Server-Sent Events (SSE)
     reply.raw.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache, no-transform',
@@ -11,14 +11,15 @@ export const sseRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) =>
       'Access-Control-Allow-Origin': '*',
     });
 
+    // Handshake inicial
     reply.raw.write('event: ready\ndata: {"status":"streaming_active"}\n\n');
 
-    // Inscreve a requisição atual no nosso "painel" de distribuição de blocos
+    // Assina o ouvinte de blocos processados pela viem
     const unsubscribe = subscribeToGasTelemetry((payload: GasTelemetryPayload) => {
       reply.raw.write(`event: gas_metric\ndata: ${JSON.stringify(payload)}\n\n`);
     });
 
-    // Desconecta e limpa a memória assim que o cliente fecha a conexão
+    // Encerra a assinatura e previne vazamento de memória quando o cliente fecha a conexão
     request.raw.on('close', () => {
       unsubscribe();
       reply.raw.end();
