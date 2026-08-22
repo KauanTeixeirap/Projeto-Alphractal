@@ -1,4 +1,3 @@
-import React from 'react';
 import { useGasTelemetry } from './hooks/useGasTelemetry';
 import { 
   Activity, 
@@ -24,11 +23,11 @@ export default function App() {
   const { currentData, history, isConnected, error } = useGasTelemetry();
 
   return (
-    <div className="min-h-screen bg-brand-bg text-gray-100 p-6 md:p-10">
+    <div className="min-h-screen bg-[#0B0E14] text-gray-100 p-6 md:p-10 font-sans">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Institucional */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-brand-border gap-4">
+        <header className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-[#222735] gap-4">
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">Alphractal</h1>
@@ -42,13 +41,13 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3 self-start md:self-auto">
-            <div className="flex items-center gap-2 bg-brand-card px-4 py-2 rounded-lg border border-brand-border">
+            <div className="flex items-center gap-2 bg-[#151922] px-4 py-2 rounded-lg border border-[#222735]">
               <span className={`w-2.5 h-2.5 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
               <span className="text-xs font-medium text-gray-300">
                 {isConnected ? 'Circuito SSE Ativo' : error ? 'Reconectando...' : 'Aguardando Stream'}
               </span>
             </div>
-            <div className="bg-brand-card px-4 py-2 rounded-lg border border-brand-border text-xs font-mono text-gray-300">
+            <div className="bg-[#151922] px-4 py-2 rounded-lg border border-[#222735] text-xs font-mono text-gray-300">
               ETH/USD: ${currentData?.ethPriceUsd ? currentData.ethPriceUsd.toLocaleString('en-US', { minimumFractionDigits: 2 }) : '---'}
             </div>
           </div>
@@ -56,7 +55,7 @@ export default function App() {
 
         {/* Métricas Principais (Cards EIP-1559) */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-brand-card p-5 rounded-xl border border-brand-border">
+          <div className="bg-[#151922] p-5 rounded-xl border border-[#222735]">
             <div className="flex justify-between items-start text-gray-400 mb-2">
               <span className="text-xs font-medium uppercase tracking-wider">Base Fee Atual</span>
               <Activity className="w-4 h-4 text-indigo-400" />
@@ -67,7 +66,7 @@ export default function App() {
             <p className="text-xs text-gray-500 mt-2">Bloco #{currentData?.blockNumber ?? '---'}</p>
           </div>
 
-          <div className="bg-brand-card p-5 rounded-xl border border-brand-border">
+          <div className="bg-[#151922] p-5 rounded-xl border border-[#222735]">
             <div className="flex justify-between items-start text-gray-400 mb-2">
               <span className="text-xs font-medium uppercase tracking-wider">Próx. Base Fee Est.</span>
               <Layers className="w-4 h-4 text-indigo-400" />
@@ -78,7 +77,7 @@ export default function App() {
             <p className="text-xs text-gray-500 mt-2">Cálculo determinístico EIP-1559</p>
           </div>
 
-          <div className="bg-brand-card p-5 rounded-xl border border-brand-border">
+          <div className="bg-[#151922] p-5 rounded-xl border border-[#222735]">
             <div className="flex justify-between items-start text-gray-400 mb-2">
               <span className="text-xs font-medium uppercase tracking-wider">Ocupação do Bloco</span>
               <Zap className="w-4 h-4 text-indigo-400" />
@@ -96,12 +95,13 @@ export default function App() {
             </div>
           </div>
 
-          <div className="bg-brand-card p-5 rounded-xl border border-brand-border">
+          <div className="bg-[#151922] p-5 rounded-xl border border-[#222735]">
             <div className="flex justify-between items-start text-gray-400 mb-2">
               <span className="text-xs font-medium uppercase tracking-wider">Tendência de Carga</span>
               {currentData?.congestionTrend === 'RISING' && <TrendingUp className="w-4 h-4 text-rose-500" />}
               {currentData?.congestionTrend === 'FALLING' && <TrendingDown className="w-4 h-4 text-emerald-500" />}
               {currentData?.congestionTrend === 'STABLE' && <Minus className="w-4 h-4 text-amber-500" />}
+              {!currentData?.congestionTrend && <Minus className="w-4 h-4 text-gray-500" />}
             </div>
             <div className="text-2xl font-bold text-white tracking-wide">
               {currentData?.congestionTrend ?? '---'}
@@ -111,25 +111,25 @@ export default function App() {
         </section>
 
         {/* Tiers de Custo Operacional (USD) */}
-        <section className="bg-brand-card p-6 rounded-xl border border-brand-border space-y-4">
+        <section className="bg-[#151922] p-6 rounded-xl border border-[#222735] space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">Estimativa de Custos Operacionais (USD)</h2>
             <p className="text-xs text-gray-400">Transferência Padrão (21.000 Gas) calculada pelo oráculo spot de mercado</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-brand-bg/60 p-4 rounded-lg border border-brand-border/60">
+            <div className="bg-[#0B0E14]/60 p-4 rounded-lg border border-[#222735]/60">
               <div className="flex items-center justify-between text-gray-400 mb-1">
                 <span className="text-xs font-medium">Slow (Econômico)</span>
                 <Clock className="w-4 h-4 text-gray-400" />
               </div>
               <div className="text-xl font-bold text-white font-mono">
-                ${currentData?.estimatedCostUsd?.slow.toFixed(4) ?? '---'}
+                ${currentData?.estimatedCostUsd?.slow ? currentData.estimatedCostUsd.slow.toFixed(4) : '---'}
               </div>
               <p className="text-[11px] text-gray-500 mt-1">Sem acréscimo de Priority Fee</p>
             </div>
 
-            <div className="bg-brand-bg/60 p-4 rounded-lg border border-indigo-500/30 relative">
+            <div className="bg-[#0B0E14]/60 p-4 rounded-lg border border-indigo-500/30 relative">
               <span className="absolute top-2 right-2 bg-indigo-500 text-[10px] text-white px-2 py-0.5 rounded font-semibold">
                 Recomendado
               </span>
@@ -137,18 +137,18 @@ export default function App() {
                 <span className="text-xs font-medium text-indigo-300">Standard (Mercado)</span>
               </div>
               <div className="text-xl font-bold text-indigo-200 font-mono">
-                ${currentData?.estimatedCostUsd?.standard.toFixed(4) ?? '---'}
+                ${currentData?.estimatedCostUsd?.standard ? currentData.estimatedCostUsd.standard.toFixed(4) : '---'}
               </div>
               <p className="text-[11px] text-gray-400 mt-1">+1.5 Gwei de gorjeta estimada</p>
             </div>
 
-            <div className="bg-brand-bg/60 p-4 rounded-lg border border-brand-border/60">
+            <div className="bg-[#0B0E14]/60 p-4 rounded-lg border border-[#222735]/60">
               <div className="flex items-center justify-between text-gray-400 mb-1">
                 <span className="text-xs font-medium">Fast (Urgência)</span>
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
               </div>
               <div className="text-xl font-bold text-emerald-400 font-mono">
-                ${currentData?.estimatedCostUsd?.fast.toFixed(4) ?? '---'}
+                ${currentData?.estimatedCostUsd?.fast ? currentData.estimatedCostUsd.fast.toFixed(4) : '---'}
               </div>
               <p className="text-[11px] text-gray-500 mt-1">+3.0 Gwei para mempool congestionada</p>
             </div>
@@ -156,7 +156,7 @@ export default function App() {
         </section>
 
         {/* Gráfico de Volatilidade da Mempool em Tempo Real */}
-        <section className="bg-brand-card p-6 rounded-xl border border-brand-border space-y-4">
+        <section className="bg-[#151922] p-6 rounded-xl border border-[#222735] space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">Volatilidade da Base Fee ao Vivo</h2>
             <p className="text-xs text-gray-400">Histórico in-memory dos últimos {history.length} blocos transmitidos via SSE</p>
@@ -177,12 +177,12 @@ export default function App() {
                     dataKey="blockNumber" 
                     stroke="#6B7280" 
                     fontSize={11}
-                    tickFormatter={(val) => `#${val.slice(-4)}`}
+                    tickFormatter={(val: string) => `#${val ? val.slice(-4) : ''}`}
                   />
                   <YAxis stroke="#6B7280" fontSize={11} unit=" G" />
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#151922', borderColor: '#222735', borderRadius: '8px', color: '#F3F4F6', fontSize: '12px' }}
-                    formatter={(val: number) => [`${val} Gwei`, 'Base Fee']}
+                    formatter={(val: unknown) => [`${typeof val === 'number' ? val.toFixed(4) : val} Gwei`, 'Base Fee']}
                     labelFormatter={(label) => `Bloco #${label}`}
                   />
                   <Area 
