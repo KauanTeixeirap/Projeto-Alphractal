@@ -19,7 +19,13 @@ async function bootstrap() {
     // 2. Registro da rota de streaming SSE
     await app.register(sseRoutes);
 
-    // 3. Health Check
+    // 3. Health Check e Rota Raiz
+    app.get('/', async () => ({
+      status: 'ok',
+      service: 'alphractal-telemetry',
+      version: '1.0.0',
+    }));
+
     app.get('/health', async () => ({
       status: 'ok',
       service: 'alphractal-telemetry',

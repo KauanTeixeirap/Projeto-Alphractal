@@ -52,16 +52,62 @@ function calculateNextBaseFee(baseFeePerGas: bigint, gasUsed: bigint, gasLimit: 
   }
 }
 
+let cachedPrice = 2500.0;
+let lastPriceFetch = 0;
+const CACHE_TTL_MS = 30000; // Cache de 30 segundos para otimizar chamadas
+
 async function fetchEthPriceUsd(): Promise<number> {
-  try {
-    const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = (await res.json()) as { price: string };
-    return parseFloat(data.price);
-  } catch (err) {
-    console.error('[Price Oracle] Fallback ativo:', err);
-    return 2500.0;
+  const now = Date.now();
+  if (now - lastPriceFetch < CACHE_TTL_MS && cachedPrice > 0) {
+    return cachedPrice;
   }
+
+  // 1. Prioridade: Coinbase API (pública, rápida e sem bloqueio geográfico de datacenters)
+  try {
+    const res = await fetch('https://api.coinbase.com/v2/prices/ETH-USD/spot', { signal: AbortSignal.timeout(3000) });
+    if (res.ok) {
+      const json = (await res.json()) as { data?: { amount?: string } };
+      if (json?.data?.amount) {
+        cachedPrice = parseFloat(json.data.amount);
+        lastPriceFetch = now;
+        return cachedPrice;
+      }
+    }
+  } catch {
+    // Prossegue para o próximo oráculo
+  }
+
+  // 2. Fallback: CoinGecko API
+  try {
+    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd', { signal: AbortSignal.timeout(3000) });
+    if (res.ok) {
+      const json = (await res.json()) as { ethereum?: { usd?: number } };
+      if (json?.ethereum?.usd) {
+        cachedPrice = json.ethereum.usd;
+        lastPriceFetch = now;
+        return cachedPrice;
+      }
+    }
+  } catch {
+    // Prossegue para o próximo oráculo
+  }
+
+  // 3. Fallback: Binance API (caso disponível na região)
+  try {
+    const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT', { signal: AbortSignal.timeout(3000) });
+    if (res.ok) {
+      const json = (await res.json()) as { price: string };
+      if (json?.price) {
+        cachedPrice = parseFloat(json.price);
+        lastPriceFetch = now;
+        return cachedPrice;
+      }
+    }
+  } catch {
+    // Mantém o preço em cache
+  }
+
+  return cachedPrice;
 }
 
 function processBlockData(block: Block, ethPriceUsd: number): GasTelemetryPayload | null {

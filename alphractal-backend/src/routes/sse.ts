@@ -29,7 +29,12 @@ export const sseRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) =>
       reply.raw.write(`event: gas_metric\ndata: ${JSON.stringify(payload)}\n\n`);
     });
 
+    const heartbeatInterval = setInterval(() => {
+      reply.raw.write(': heartbeat\n\n');
+    }, 20000);
+
     request.raw.on('close', () => {
+      clearInterval(heartbeatInterval);
       unsubscribe();
       reply.raw.end();
     });
