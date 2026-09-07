@@ -13,6 +13,9 @@
   <a href="https://projeto-alphractal.onrender.com" target="_blank">
     <img src="https://img.shields.io/badge/Deploy%20Backend-Render%20Live-brightgreen?style=for-the-badge&logo=render" alt="Deploy Render">
   </a>
+  <a href="https://projeto-alphractal-nu.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/Deploy%20Frontend-Vercel%20Live-black?style=for-the-badge&logo=vercel" alt="Deploy Vercel">
+  </a>
   <img src="https://img.shields.io/badge/Status-MVP%20Funcional-blue?style=for-the-badge" alt="Status MVP">
   <img src="https://img.shields.io/badge/Network-Ethereum%20Mainnet-627EEA?style=for-the-badge&logo=ethereum" alt="Ethereum Mainnet">
   <img src="https://img.shields.io/badge/Protocol-EIP--1559-indigo?style=for-the-badge" alt="EIP-1559">
@@ -265,7 +268,8 @@ Acesse a aplicação no navegador em `http://localhost:5173`.
   - Endpoint de Teste Rápido: [https://projeto-alphractal.onrender.com/health](https://projeto-alphractal.onrender.com/health)
   - Endpoint de Histórico: [https://projeto-alphractal.onrender.com/api/v1/fees/history](https://projeto-alphractal.onrender.com/api/v1/fees/history)
   - Endpoint de Stream SSE: `https://projeto-alphractal.onrender.com/api/v1/fees/stream`
-- 🌐 **Frontend**: Configurado com roteamento SPA para a [Vercel](https://vercel.com) via `alphractal-frontend/vercel.json`.
+- 🌐 **Frontend em Produção**: [https://projeto-alphractal-nu.vercel.app](https://projeto-alphractal-nu.vercel.app)
+  - Deploy na [Vercel](https://vercel.com), com roteamento SPA configurado via `alphractal-frontend/vercel.json`.
 
 ---
 
@@ -277,6 +281,7 @@ Acesse a aplicação no navegador em `http://localhost:5173`.
   - Streaming Server-Sent Events (SSE) com *keep-alive*.
   - Dashboard interativo React 19 com gráficos e tiers em USD.
   - Deploy do backend no Render.
+  - Deploy do frontend na Vercel.
 - [ ] **Fase 2 (Expansão de Métricas)**:
   - Estimativa de custos para transações complexas (Swaps no Uniswap v3, operações Aave/Compound e transferências ERC-20).
   - Alertas parametrizáveis de gas spikes na interface.
